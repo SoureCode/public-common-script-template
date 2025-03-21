@@ -46,6 +46,101 @@ function _pubcst_call_hook() {
         source "${LOCAL_HOOK_FILE}" "$@"
     fi
 }
+function _pubcst_resolve_binary() {
+    local BINARY_NAME="${1:-}"
+    local IS_REQUIRED="${2:-true}"
+
+    if [ -z "$BINARY_NAME" ]; then
+        echo "Missing required parameter: BINARY_NAME"
+        exit 1
+    fi
+
+    local ALIAS_OUTPUT
+    local BINARY_PATH
+
+    ALIAS_OUTPUT="$(alias "$BINARY_NAME" 2>/dev/null)"
+
+    if [ -n "$ALIAS_OUTPUT" ]; then
+        ALIAS_OUTPUT=${ALIAS_OUTPUT#alias } # Remove "alias " prefix
+        ALIAS_OUTPUT=${ALIAS_OUTPUT#*=}     # Remove everything before "="
+        ALIAS_OUTPUT=${ALIAS_OUTPUT//\'/}   # Remove single quotes
+
+        echo "$ALIAS_OUTPUT"
+        return 0
+    fi
+
+    BINARY_PATH="$(command -v "$BINARY_NAME" 2>/dev/null)"
+
+    if [ -n "$BINARY_PATH" ]; then
+        echo "$BINARY_PATH"
+        return 0
+    fi
+
+    if [ "$IS_REQUIRED" = "true" ]; then
+        echo "Missing binary: $BINARY_NAME"
+        exit 1
+    fi
+
+    echo "MISSING BINARY '$BINARY_NAME'"
+    return 1
+}
+#</editor-fold>
+
+#<editor-fold desc="binary functions">
+_PUBCST_DOCKER_BINARY_CACHE=""
+_PUBCST_HAS_DOCKER=false
+function _pubcst_docker() {
+    if [ -z "$_PUBCST_DOCKER_BINARY_CACHE" ]; then
+        _PUBCST_DOCKER_BINARY_CACHE="$(_pubcst_resolve_binary "docker")"
+        _PUBCST_HAS_DOCKER=true
+    fi
+
+    "$_PUBCST_DOCKER_BINARY_CACHE" "$@"
+}
+_PUBCST_SYMFONY_BINARY_CACHE=""
+_PUBCST_HAS_SYMFONY=false
+function _pubcst_symfony() {
+    if [ -z "$_PUBCST_SYMFONY_BINARY_CACHE" ]; then
+        _PUBCST_SYMFONY_BINARY_CACHE="$(_pubcst_resolve_binary "symfony")"
+        _PUBCST_HAS_SYMFONY=true
+    fi
+
+    "$_PUBCST_SYMFONY_BINARY_CACHE" "$@"
+}
+_PUBCST_PHP_BINARY_CACHE=""
+_PUBCST_HAS_PHP=false
+function _pubcst_php() {
+    if [ "$_PUBCST_HAS_SYMFONY" = "true" ]; then
+        _pubcst_symfony php "$@"
+    else
+        if [ -z "$_PUBCST_PHP_BINARY_CACHE" ]; then
+            _PUBCST_PHP_BINARY_CACHE="$(_pubcst_resolve_binary "php")"
+            _PUBCST_HAS_PHP=true
+        fi
+
+        "$_PUBCST_PHP_BINARY_CACHE" "$@"
+    fi
+}
+_PUBCST_COMPOSER_BINARY_CACHE=""
+_PUBCST_HAS_COMPOSER=false
+function _pubcst_composer() {
+    if [ "$_PUBCST_HAS_SYMFONY" = "true" ]; then
+        _pubcst_symfony composer "$@"
+    else
+        if [ -z "$_PUBCST_COMPOSER_BINARY_CACHE" ]; then
+            _PUBCST_COMPOSER_BINARY_CACHE="$(_pubcst_resolve_binary "composer")"
+            _PUBCST_HAS_COMPOSER=true
+        fi
+
+        "$_PUBCST_COMPOSER_BINARY_CACHE" "$@"
+    fi
+}
+function _pubcst_binary_warmup() {
+    # pre-check for symfony binary to make calls for php and composer with symfony
+    if _pubcst_resolve_binary "symfony" "false"; then
+        _PUBCST_HAS_SYMFONY=true
+    fi
+}
 #</editor-fold>
 
 #<editor-fold desc="git functions">
@@ -218,4 +313,3 @@ function _pubcst_composer_has_dev_package() {
     return 1
 }
 #</editor-fold>
-
