@@ -168,3 +168,54 @@ function _pubcst_version_create() {
     _pubcst_call_hook "pubcst_post_version" "${VERSION}" "${TAG_NAME}"
 }
 #</editor-fold>
+
+#<editor-fold desc="composer functions">
+_PUBCST_COMPOSER_DEPENDENCIES_CACHE=""
+
+function _pubcst_composer_has_package() {
+    local PACKAGE="${1:-}"
+    if [ -z "${PACKAGE}" ]; then
+        echo "Missing required parameter: PACKAGE"
+        exit 1
+    fi
+
+    if [ -f "${PUBCST_PROJECT_DIRECTORY}/composer.json" ]; then
+        if [ -z "${_PUBCST_COMPOSER_DEPENDENCIES_CACHE}" ]; then
+            _PUBCST_COMPOSER_DEPENDENCIES_CACHE=$(jq -r '.require | keys[]' "${PUBCST_PROJECT_DIRECTORY}/composer.json")
+        fi
+
+        local COMPOSER_DEPENDENCIES="${_PUBCST_COMPOSER_DEPENDENCIES_CACHE}"
+
+        if echo "${COMPOSER_DEPENDENCIES}" | grep -q "^${PACKAGE}$"; then
+            return 0
+        fi
+    fi
+
+    return 1
+}
+
+_PUBCST_COMPOSER_DEV_DEPENDENCIES_CACHE=""
+
+function _pubcst_composer_has_dev_package() {
+    local PACKAGE="${1:-}"
+    if [ -z "${PACKAGE}" ]; then
+        echo "Missing required parameter: PACKAGE"
+        exit 1
+    fi
+
+    if [ -f "${PUBCST_PROJECT_DIRECTORY}/composer.json" ]; then
+        if [ -z "${_PUBCST_COMPOSER_DEV_DEPENDENCIES_CACHE}" ]; then
+            _PUBCST_COMPOSER_DEV_DEPENDENCIES_CACHE=$(jq -r '.["require-dev"] | keys[]' "${PUBCST_PROJECT_DIRECTORY}/composer.json")
+        fi
+
+        local COMPOSER_DEV_DEPENDENCIES="${_PUBCST_COMPOSER_DEV_DEPENDENCIES_CACHE}"
+
+        if echo "${COMPOSER_DEV_DEPENDENCIES}" | grep -q "^${PACKAGE}$"; then
+            return 0
+        fi
+    fi
+
+    return 1
+}
+#</editor-fold>
+
