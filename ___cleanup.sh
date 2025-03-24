@@ -14,14 +14,28 @@ fi
 GIT_DIRECTORY="${PUBCST_CURRENT_DIRECTORY:?}/.git)"
 GIT_IGNORE_FILE="${PUBCST_CURRENT_DIRECTORY:?}/.gitignore"
 
-if [ -d "${GIT_DIRECTORY:?}"  ]; then
+if [ -d "${GIT_DIRECTORY:?}" ]; then
+    echo "Removing ${GIT_DIRECTORY:?} directory"
     rm -rf "${GIT_DIRECTORY:?}"
+else
+    echo "No ${GIT_DIRECTORY:?} directory to remove."
 fi
 
 if [ -f "${GIT_IGNORE_FILE:?}" ]; then
+    echo "Removing ${GIT_IGNORE_FILE:?} file"
     rm -f "${GIT_IGNORE_FILE:?}"
+else
+    echo "No ${GIT_IGNORE_FILE:?} file to remove."
 fi
 
 if [ -d "${PUBCST_CURRENT_DIRECTORY:?}" ]; then
-    find "${PUBCST_CURRENT_DIRECTORY:?}" -maxdepth 1 -type f -name "__*" -exec rm -f {} \;
+    FILES="$(find "${PUBCST_CURRENT_DIRECTORY:?}" -maxdepth 1 -type f -name "__*")"
+
+    if [ -n "${FILES:?}" ]; then
+        echo "Removing the following files:"
+        echo "${FILES:?}"
+        find "${PUBCST_CURRENT_DIRECTORY:?}" -maxdepth 1 -type f -name "__*" -exec rm -f {} \;
+    else
+        echo "No files to remove."
+    fi
 fi
