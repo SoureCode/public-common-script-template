@@ -170,9 +170,15 @@ function _pubcst_git_update_template() {
     echo "Cloning repository '${REMOTE_URL}' (branch: '${REMOTE_BRANCH}') into '${TARGET_DIRECTORY}'..."
     git clone --depth 1 --branch "${REMOTE_BRANCH}" "${REMOTE_URL}" "${TARGET_DIRECTORY}" 2>/dev/null
 
-    if [ -d "${TARGET_DIRECTORY}/.git" ]; then
-        echo "Removing folder '${TARGET_DIRECTORY}/.git'..."
-        rm -rf "${TARGET_DIRECTORY:?}/.git" 2>/dev/null
+    local CLEANUP_SCRIPT_PATH="${ABSOLUTE_TARGET_DIRECTORY}/___cleanup.sh"
+
+    if [ -f "${CLEANUP_SCRIPT_PATH}" ]; then
+        bash "${CLEANUP_SCRIPT_PATH}"
+    else
+        if [ -d "${TARGET_DIRECTORY}/.git" ]; then
+            echo "Removing folder '${TARGET_DIRECTORY}/.git'..."
+            rm -rf "${TARGET_DIRECTORY:?}/.git" 2>/dev/null
+        fi
     fi
 }
 
