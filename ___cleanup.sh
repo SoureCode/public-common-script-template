@@ -11,7 +11,7 @@ if git remote -v | grep -qe "-script-template" && [ "${PUBCST_CURRENT_DIRECTORY:
     exit 1
 fi
 
-GIT_DIRECTORY="${PUBCST_CURRENT_DIRECTORY:?}/.git)"
+GIT_DIRECTORY="${PUBCST_CURRENT_DIRECTORY:?}/.git"
 GIT_IGNORE_FILE="${PUBCST_CURRENT_DIRECTORY:?}/.gitignore"
 
 if [ -d "${GIT_DIRECTORY:?}" ]; then
