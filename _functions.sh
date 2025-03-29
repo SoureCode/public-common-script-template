@@ -208,7 +208,7 @@ function _pubcst_git_has_remote_template() {
 
         REMOTE_ORGANIZATION="$(echo "${REMOTE_URL}" | awk -F ':' '{print $2}' | awk -F '/' '{print $1}')"
 
-        if [ "${REMOTE_ORGANIZATION}" != "chapterjason" ]; then
+        if [ "${REMOTE_ORGANIZATION}" != "SoureCode" ]; then
             continue
         fi
 
