@@ -22,7 +22,7 @@ Install the script-template:
 
 ```bash
 # clone
-git clone --depth 1 -b "master" "git@github.com:chapterjason/public-common-script-template.git" "scripts/public-common"
+git clone --depth 1 -b "master" "git@github.com:SoureCode/public-common-script-template.git" "scripts/public-common"
 # cleanup
 ./scripts/public-common/___cleanup.sh
 ```
