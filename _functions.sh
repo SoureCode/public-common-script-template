@@ -22,7 +22,6 @@ function _pubcst_print_context() {
     fi
 
     echo "========== CONTEXT =========="
-    echo "PUBCST_CONTEXT"
     echo "CURRENT_ID: ${PUBCST_CURRENT_ID}"
     echo "CURRENT_WORKING_DIRECTORY: ${PUBCST_CURRENT_WORKING_DIRECTORY}"
     echo "CURRENT_HOME: ${PUBCST_CURRENT_HOME}"
