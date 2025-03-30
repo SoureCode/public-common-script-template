@@ -143,6 +143,12 @@ function _pubcst_binary_warmup() {
 }
 #</editor-fold>
 
+#<editor-fold desc="load php env">
+if [ -f "${PUBCST_PROJECT_DIRECTORY}/.env.local.php" ]; then
+    eval "$(php -r "\$entries = include '${CURRENT_DIRECTORY}/.env.local.php'; foreach (\$entries as \$key => \$value) { echo \"\$key=\$value\".PHP_EOL; }")"
+fi
+#</editor-fold>
+
 #<editor-fold desc="git functions">
 function _pubcst_git_update_template() {
     local REMOTE_BRANCH="${1:-}"

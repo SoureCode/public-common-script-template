@@ -18,3 +18,28 @@ PUBCST_CURRENT_ID="$(id)"
 PUBCST_CURRENT_WORKING_DIRECTORY="$(pwd)"
 PUBCST_CURRENT_HOME="${HOME:-}"
 PUBCST_CURRENT_SHELL="${SHELL:-}"
+
+APP_ENV="${APP_ENV:-dev}"
+
+# load env in this order:
+# .env
+# .env.local
+# .env.<APP_ENV>
+# .env.<APP_ENV>.local
+# .env.local.php -> is in _functions.php as there needs to the php_binary available.
+
+if [ -f "${PUBCST_PROJECT_DIRECTORY}/.env" ]; then
+    source "${PUBCST_PROJECT_DIRECTORY}/.env"
+fi
+
+if [ -f "${PUBCST_PROJECT_DIRECTORY}/.env.local" ]; then
+    source "${PUBCST_PROJECT_DIRECTORY}/.env.local"
+fi
+
+if [ -f "${PUBCST_PROJECT_DIRECTORY}/.env.${APP_ENV}" ]; then
+    source "${PUBCST_PROJECT_DIRECTORY}/.env.${APP_ENV}"
+fi
+
+if [ -f "${PUBCST_PROJECT_DIRECTORY}/.env.${APP_ENV}.local" ]; then
+    source "${PUBCST_PROJECT_DIRECTORY}/.env.${APP_ENV}.local"
+fi
