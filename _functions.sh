@@ -158,7 +158,7 @@ _pubcst_binary_warmup >/dev/null 2>&1
 
 #<editor-fold desc="load php env">
 if [ -f "${PUBCST_PROJECT_DIRECTORY}/.env.local.php" ]; then
-eval "$(php -r "\$entries = include '${PUBCST_PROJECT_DIRECTORY}/.env.local.php'; foreach (\$entries as \$key => \$value) { echo \"\$key=\$value\".PHP_EOL; }")"
+    eval "$(php -r "\$entries = include '${PUBCST_PROJECT_DIRECTORY}/.env.local.php'; foreach (\$entries as \$key => \$value) { echo \"\$key=\$value\".PHP_EOL; }")"
 fi
 #</editor-fold>
 
@@ -313,7 +313,7 @@ function _pubcst_composer_has_package() {
 
     if [ -f "${PUBCST_PROJECT_DIRECTORY}/composer.json" ]; then
         if [ -z "${_PUBCST_COMPOSER_DEPENDENCIES_CACHE}" ]; then
-            _PUBCST_COMPOSER_DEPENDENCIES_CACHE=$(jq -r '.require | keys[]' "${PUBCST_PROJECT_DIRECTORY}/composer.json")
+            _PUBCST_COMPOSER_DEPENDENCIES_CACHE=$(composer show --no-dev --format=text | awk '{print $1}')
         fi
 
         local COMPOSER_DEPENDENCIES="${_PUBCST_COMPOSER_DEPENDENCIES_CACHE}"
@@ -337,7 +337,13 @@ function _pubcst_composer_has_dev_package() {
 
     if [ -f "${PUBCST_PROJECT_DIRECTORY}/composer.json" ]; then
         if [ -z "${_PUBCST_COMPOSER_DEV_DEPENDENCIES_CACHE}" ]; then
-            _PUBCST_COMPOSER_DEV_DEPENDENCIES_CACHE=$(jq -r '.["require-dev"] | keys[]' "${PUBCST_PROJECT_DIRECTORY}/composer.json")
+            local PROD_PACKAGES
+            local ALL_PACKAGES
+
+            PROD_PACKAGES="$(composer show --no-dev --format=text | awk '{print $1}')"
+            ALL_PACKAGES="$(composer show --format=text | awk '{print $1}')"
+
+            _PUBCST_COMPOSER_DEV_DEPENDENCIES_CACHE=$(echo "${ALL_PACKAGES}" | grep -v -F "${PROD_PACKAGES}")
         fi
 
         local COMPOSER_DEV_DEPENDENCIES="${_PUBCST_COMPOSER_DEV_DEPENDENCIES_CACHE}"
