@@ -40,10 +40,13 @@ done
 ARGUMENT_VERSION="${1:-}"
 #</editor-fold>
 
-#<editor-fold desc="main">
-pushd "${PUBCST_PROJECT_DIRECTORY}" >/dev/null 2>&1
+function _main() {
 
-_pubcst_version_create "${ARGUMENT_VERSION}"
+    pushd "${PUBCST_PROJECT_DIRECTORY}" >/dev/null 2>&1
 
-popd >/dev/null 2>&1
-#</editor-fold>
+    _pubcst_version_create "${ARGUMENT_VERSION}"
+
+    popd >/dev/null 2>&1
+}
+
+_main
