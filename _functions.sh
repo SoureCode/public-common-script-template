@@ -158,7 +158,7 @@ _pubcst_binary_warmup >/dev/null 2>&1
 
 #<editor-fold desc="load php env">
 if [ -f "${PUBCST_PROJECT_DIRECTORY}/.env.local.php" ]; then
-    eval "$(php -r "\$entries = include '${CURRENT_DIRECTORY}/.env.local.php'; foreach (\$entries as \$key => \$value) { echo \"\$key=\$value\".PHP_EOL; }")"
+eval "$(php -r "\$entries = include '${PUBCST_PROJECT_DIRECTORY}/.env.local.php'; foreach (\$entries as \$key => \$value) { echo \"\$key=\$value\".PHP_EOL; }")"
 fi
 #</editor-fold>
 
