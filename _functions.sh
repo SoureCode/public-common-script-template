@@ -266,7 +266,7 @@ function _pubcst_version_create() {
         _pubcst_git_commit "Release $VERSION"
     fi
 
-    git tag "${TAG_NAME}"
+    git tag "${TAG_NAME}" -m "Release ${TAG_NAME}"
 
     _pubcst_call_hook "pubcst_post_version" "${VERSION}" "${TAG_NAME}"
 }
