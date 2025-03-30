@@ -218,6 +218,8 @@ function _pubcst_git_has_remote_template() {
             return 0
         fi
     done
+
+    return 1
 }
 
 function _pubcst_git_commit() {
