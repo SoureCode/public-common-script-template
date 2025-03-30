@@ -15,9 +15,9 @@ PUBCST_CURRENT_DIRECTORY="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 
 source "${PUBCST_CURRENT_DIRECTORY}/_variables.sh"
 
 #<editor-fold desc="base functions">
-PUBCST_CONTEXT_PRINTED=false
+_PUBCST_CONTEXT_PRINTED=false
 function _pubcst_print_context() {
-    if [ "$PUBCST_CONTEXT_PRINTED" = true ]; then
+    if [ "$_PUBCST_CONTEXT_PRINTED" = true ]; then
         return
     fi
 
@@ -30,7 +30,7 @@ function _pubcst_print_context() {
     echo "PROJECT_DIRECTORY: ${PUBCST_PROJECT_DIRECTORY}"
     echo "============================="
 
-    PUBCST_CONTEXT_PRINTED=true
+    _PUBCST_CONTEXT_PRINTED=true
 }
 
 function _pubcst_call_hook() {
@@ -150,6 +150,8 @@ function _pubcst_binary_warmup() {
         _PUBCST_HAS_SYMFONY=true
     fi
 }
+
+_pubcst_binary_warmup
 #</editor-fold>
 
 #<editor-fold desc="load php env">
