@@ -28,6 +28,8 @@ function _pubcst_print_context() {
     echo "CURRENT_SHELL: ${PUBCST_CURRENT_SHELL}"
     echo "SCRIPT_DIRECTORY: ${PUBCST_SCRIPT_DIRECTORY}"
     echo "PROJECT_DIRECTORY: ${PUBCST_PROJECT_DIRECTORY}"
+    echo "PHP: $(_pubcst_php -v)"
+    echo "COMPOSER: $(_pubcst_composer -V)"
     echo "============================="
 
     _PUBCST_CONTEXT_PRINTED=true
