@@ -153,7 +153,7 @@ function _pubcst_binary_warmup() {
     fi
 }
 
-_pubcst_binary_warmup
+_pubcst_binary_warmup >/dev/null 2>&1
 #</editor-fold>
 
 #<editor-fold desc="load php env">
