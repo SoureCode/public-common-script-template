@@ -3,9 +3,10 @@
 set -euo pipefail
 
 PUBCST_CURRENT_DIRECTORY="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
-PUBCST_GIT_ROOT_DIRECTORY="$(git rev-parse --show-toplevel)"
+PUBCST_IS_IN_GIT="$(git rev-parse --is-inside-work-tree 2>/dev/null || echo "false")"
+PUBCST_GIT_ROOT_DIRECTORY="$(git rev-parse --show-toplevel 2>/dev/null || false)"
 
-if git remote -v | grep -qe "-script-template" && [ "${PUBCST_CURRENT_DIRECTORY:?}" == "${PUBCST_GIT_ROOT_DIRECTORY:?}" ]; then
+if git remote -v | grep -qe "-script-template" && [[ "$PUBCST_IS_IN_GIT" = true && "${PUBCST_CURRENT_DIRECTORY:?}" == "${PUBCST_GIT_ROOT_DIRECTORY:?}" ]]; then
     echo "Do not run this script inside a script-template repository."
     echo "It is only meant to be used inside a library or project to cleanup files which shouldn't be used."
     exit 1
