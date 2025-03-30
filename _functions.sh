@@ -149,6 +149,16 @@ if [ -f "${PUBCST_PROJECT_DIRECTORY}/.env.local.php" ]; then
 fi
 #</editor-fold>
 
+#<editor-fold desc="env functions">
+function _pubcst_is_prod() {
+    [ "${APP_ENV:-dev}" == "prod" ]
+}
+
+function _pubcst_is_dev() {
+    [ "${APP_ENV:-dev}" == "dev" ]
+}
+#</editor-fold>
+
 #<editor-fold desc="git functions">
 function _pubcst_git_update_template() {
     local REMOTE_BRANCH="${1:-}"
