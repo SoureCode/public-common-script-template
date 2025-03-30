@@ -15,13 +15,23 @@ PUBCST_CURRENT_DIRECTORY="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 
 source "${PUBCST_CURRENT_DIRECTORY}/_variables.sh"
 
 #<editor-fold desc="base functions">
+PUBCST_CONTEXT_PRINTED=false
 function _pubcst_print_context() {
+    if [ "$PUBCST_CONTEXT_PRINTED" = true ]; then
+        return
+    fi
+
+    echo "========== CONTEXT =========="
+    echo "PUBCST_CONTEXT"
     echo "CURRENT_ID: ${PUBCST_CURRENT_ID}"
     echo "CURRENT_WORKING_DIRECTORY: ${PUBCST_CURRENT_WORKING_DIRECTORY}"
     echo "CURRENT_HOME: ${PUBCST_CURRENT_HOME}"
     echo "CURRENT_SHELL: ${PUBCST_CURRENT_SHELL}"
     echo "SCRIPT_DIRECTORY: ${PUBCST_SCRIPT_DIRECTORY}"
     echo "PROJECT_DIRECTORY: ${PUBCST_PROJECT_DIRECTORY}"
+    echo "============================="
+
+    PUBCST_CONTEXT_PRINTED=true
 }
 
 function _pubcst_call_hook() {
