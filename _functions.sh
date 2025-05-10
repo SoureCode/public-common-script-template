@@ -356,3 +356,24 @@ function _pubcst_composer_has_dev_package() {
     return 1
 }
 #</editor-fold>
+
+#<editor-fold desc="tools functions">
+function _pubcst_tools_ensure_directory() {
+    if [ ! -d "${PUBCST_TOOLS_DIRECTORY}" ]; then
+        mkdir -p "${PUBCST_TOOLS_DIRECTORY}"
+    fi
+}
+
+function _pubcst_tools_install() {
+    local NAME="${1:-}"
+    local URL="${2:-}"
+    local TOOL_FILE="${PUBCST_TOOLS_DIRECTORY}/${NAME}"
+
+    _pubcst_tools_ensure_directory
+
+    if [ ! -f "${TOOL_FILE}" ]; then
+        wget "${URL}" -O "${TOOL_FILE}" 2>/dev/null
+        chmod +x "${TOOL_FILE}"
+    fi
+}
+#</editor-fold>
